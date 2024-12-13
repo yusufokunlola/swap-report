@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import os
+import xlsxwriter
 
 # Set up page configuration
 st.set_page_config(page_title="SIM SWAP Report App", page_icon="📱")
@@ -33,7 +34,7 @@ st.markdown(
     </style>
 
     <div class="title-container">
-        <div class="rolling-title">SIM SWAP Report App</div>
+        <div class="rolling-title">Pending SIM SWAP Report App 📱</div>
     </div>
     """,
     unsafe_allow_html=True
@@ -52,12 +53,15 @@ st.sidebar.write("#### Usage Guide")
 st.sidebar.write(
     """
     1. Click the **Browse files** button on the main page to upload a `csv` file or drag and drop.
-    2. Once uploaded, the app will process the file and display the results. You can preview results by selecting the tabs.
+    2. The app will process the file, download to your local computer and display the results. 
+    3. You can preview results by selecting the tabs.
     """
 )
 
-# File upload section
-uploaded_file = st.file_uploader("Upload CSV File", type=["csv"])
+st.sidebar.write("#### Developer: [Yusuf Okunlola](https://www.linkedin.com/in/yusufokunlola/)")
+st.sidebar.write("#### `v0.1, Dec 2024`")
+
+uploaded_file = st.file_uploader("**Upload CSV File**", type=["csv"])
 
 if uploaded_file:
     # Load the uploaded file into a DataFrame
@@ -111,11 +115,12 @@ if uploaded_file:
 
     st.success(f"Data processed successfully! The file has been saved to your Downloads folder: {output_file}")
 
+    st.write("#### Processed Data Overview")
     # Create tabs for data preview
     tab1, tab2, tab3, tab4 = st.tabs(["Uploaded Data", "Pending Data", "Checked Data", "Summary Data"])
     with tab1:
-        st.write("**Preview of Uploaded Data**")
-        st.dataframe(df.head())
+        st.write("**Uploaded Data**")
+        st.dataframe(df)
 
     with tab2:
         st.write("**Pending Data**")
